@@ -4,9 +4,14 @@ import Todo from './Todo.interface';
 const endPoint = 'https://super-crud.herokuapp.com/todos';
 
 class TodoModel {
-    static all = async () => {
+    static all = async (): Promise<Todo[]> => {
         const response: AxiosResponse = await axios.get<Todo[]>(endPoint);
         return response.data.todos;
+    }
+
+    static create = async (todo: Todo): Promise<Todo> => {
+        const response: AxiosResponse = await axios.post<Todo>(endPoint, todo);
+        return response.data;
     }
 }
 
