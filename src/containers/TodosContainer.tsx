@@ -14,11 +14,24 @@ class TodosContainer extends React.Component<{}, State> {
         todos: [],
     }
 
+    static sortTodos = (todoArr: Todo[]): Todo[] => {
+        return todoArr.sort((a: Todo, b: Todo) => {
+            if (typeof a.priority !== 'number' || ! a.priority) {
+                a.priority = 0;
+            };
+            if (typeof b.priority !== 'number' || ! b.priority) {
+                b.priority = 0;
+            };
+            return b.priority - a.priority;
+        });
+    }
+
     fetchData = (): void => {
         TodoModel.all()
             .then((response: Todo[]) => {
+                const sortedTodos = TodosContainer.sortTodos(response);
                 this.setState({
-                    todos: response,
+                    todos: sortedTodos,
                 })
             })
     }
@@ -30,12 +43,19 @@ class TodosContainer extends React.Component<{}, State> {
     handleSubmit = (todo: Todo): void => {
         TodoModel.create(todo)
             .then((response: Todo) => {
-                console.log(response);
                 let todos: Todo[] = this.state.todos;
                 todos.push(response);
+                const sortedTodos = TodosContainer.sortTodos(todos);
                 this.setState({
-                    todos: todos,
+                    todos: sortedTodos,
                 });
+            });
+    }
+
+    updateTodo = (todo: Todo): void => {
+        TodoModel.update(todo)
+            .then((response: Todo) => {
+                this.fetchData();
             });
     }
 
@@ -45,7 +65,7 @@ class TodosContainer extends React.Component<{}, State> {
             <div>
                 <h1>To Do's</h1>
                 <CreateTodoForm handleSubmit={this.handleSubmit} />
-                <TodoList todos={this.state.todos} />
+                <TodoList todos={this.state.todos} updateTodo={this.updateTodo} />
             </div>
         );
     }

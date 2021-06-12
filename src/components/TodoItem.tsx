@@ -1,9 +1,11 @@
 import Todo from '../models/Todo.interface';
 
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Check2Circle } from 'react-bootstrap-icons';
 
 interface Props {
     todo: Todo,
+    updateTodo: (todo: Todo) => void,
 }
 
 function TodoItem(props: Props): JSX.Element {
@@ -17,9 +19,22 @@ function TodoItem(props: Props): JSX.Element {
             variant = 'danger';
         };
     };
+    let completedClass: string = 'checkbox';
+    if (props.todo.completed) {
+        completedClass+= ' done';
+    };
     return (
         <div>
-            <ListGroup.Item variant={variant}>{props.todo.body}</ListGroup.Item>
+            <ListGroup.Item variant={variant} className={props.todo.completed ? 'done-task' : ''}>
+                <Check2Circle 
+                    className={completedClass}
+                    onClick={() => props.updateTodo({
+                        ...props.todo,
+                        completed: !props.todo.completed,
+                    })}
+                />
+                {props.todo.body}
+            </ListGroup.Item>
         </div>
     );
 }

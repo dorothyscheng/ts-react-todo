@@ -6,3 +6,16 @@
     border-radius: 5px;
     padding: 10px;
 }
+.checkbox {
+    margin-right: 50px;
+    color: gray;
+    cursor: pointer;
+    font-size: 25px;
+}
+.done {
+    color: green;
+}
+.done-task {
+    text-decoration: line-through;
+    color: gray;
+}

@@ -28,8 +28,14 @@ class CreateTodoForm extends React.Component<Props, State> {
     }
 
     handlePriorityChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        let priority: number | string = e.target.value;
+        if (e.target.value === '1 (lowest)') {
+            priority = 1;
+        } else if (e.target.value === '10 (highest)') {
+            priority = 10;
+        };
         this.setState({
-            priority: e.target.value,
+            priority: priority,
         });
     }
 
@@ -39,19 +45,21 @@ class CreateTodoForm extends React.Component<Props, State> {
         });
     }
 
+    handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        this.props.handleSubmit(this.state);
+        this.setState({
+            body: '',
+            priority: '',
+            completed: false,
+        });
+    }
+
     render(): JSX.Element {
         return (
                 <Form 
                     className="new-todo-form"
-                    onSubmit={(e: React.FormEvent) => {
-                        e.preventDefault();
-                        this.props.handleSubmit(this.state);
-                        this.setState({
-                            body: '',
-                            priority: '',
-                            completed: false,
-                        });
-                    }}
+                    onSubmit={this.handleSubmit}
                 >
                     <Form.Group controlId="body">
                         <Form.Label>To Do:</Form.Label>
@@ -61,7 +69,7 @@ class CreateTodoForm extends React.Component<Props, State> {
                             name="body" 
                             value={this.state.body}
                             onChange={this.handleBodyChange}
-                            />
+                        />
                     </Form.Group>
 
                     <Form.Group controlId="priority">
@@ -92,7 +100,7 @@ class CreateTodoForm extends React.Component<Props, State> {
                         label="Completed" 
                         name="completed"
                         onChange={this.handleCompletedChange}
-                        />
+                    />
 
                     <Button variant="primary" type="submit">
                         Submit

@@ -13,6 +13,11 @@ class TodoModel {
         const response: AxiosResponse = await axios.post<Todo>(endPoint, todo);
         return response.data;
     }
+
+    static update = async (todo: Todo): Promise<Todo> => {
+        const response: AxiosResponse = await axios.put<Todo>(`${endPoint}/${todo._id}`, todo);
+        return response.data;
+    }
 }
 
 export default TodoModel;
