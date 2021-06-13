@@ -4,17 +4,22 @@ import Todo from '../models/Todo.interface';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+interface Props {
+    todo: Todo,
+    style: {
+        display: string,
+    },
+    updateTodo: (todo: Todo) => void,
+    toggleUpdateForm: () => void,
+}
+
 interface State {
     body: string,
     priority: number | string,
     completed: boolean,
 }
 
-interface Props {
-    handleSubmit: (todo: Todo) => void,
-}
-
-class CreateTodoForm extends React.Component<Props, State> {
+class UpdateTodoForm extends React.Component<Props, State> {
     state = {
         body: '',
         priority: '',
@@ -39,7 +44,7 @@ class CreateTodoForm extends React.Component<Props, State> {
         });
     }
 
-    handleSubmit = (e: React.FormEvent) => {
+    handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
         let priority: number | string = this.state.priority;
         if (priority === '1 (lowest)') {
@@ -47,23 +52,36 @@ class CreateTodoForm extends React.Component<Props, State> {
         } else if (priority === '10 (highest)') {
             priority = 10;
         };
-        this.props.handleSubmit({
+        this.props.updateTodo({
             ...this.state,
+            _id: this.props.todo._id,
             priority: priority,
         });
-        this.setState({
-            body: '',
-            priority: '',
-            completed: false,
-        });
+        this.props.toggleUpdateForm();
     }
 
-    render(): JSX.Element {
+    componentDidMount() {
+        let priority: string | number = '';
+        if (this.props.todo.priority) {
+            const todoPriority = this.props.todo.priority;
+            if (todoPriority === 1) {
+                priority = '1 (lowest)';
+            } else if (todoPriority === 10) {
+                priority = '10 (highest)';
+            } else {
+                priority = todoPriority;
+            };
+        };
+        this.setState({
+            body: this.props.todo.body,
+            priority: priority,
+            completed: this.props.todo.completed,
+        })
+    }
+
+    render() {
         return (
-                <Form 
-                    className="new-todo-form"
-                    onSubmit={this.handleSubmit}
-                >
+            <Form className="update-todo-form" style={this.props.style} onSubmit={this.handleSubmit}>
                     <Form.Group controlId="body">
                         <Form.Label>To Do:</Form.Label>
                         <Form.Control 
@@ -102,6 +120,7 @@ class CreateTodoForm extends React.Component<Props, State> {
                         type="checkbox" 
                         label="Completed" 
                         name="completed"
+                        checked={this.state.completed}
                         onChange={this.handleCompletedChange}
                     />
 
@@ -111,6 +130,6 @@ class CreateTodoForm extends React.Component<Props, State> {
                 </Form>
         );
     }
-};
+}
 
-export default CreateTodoForm;
+export default UpdateTodoForm;

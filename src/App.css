@@ -5,6 +5,17 @@
     border: 1px solid black;
     border-radius: 5px;
     padding: 10px;
+    margin-bottom: 20px;
+}
+.update-todo-form {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: gray;
+    margin-top: 20px;
+    border-radius: 5px;
+    color: black;
+    padding: 10px;
 }
 .checkbox {
     margin-right: 50px;
