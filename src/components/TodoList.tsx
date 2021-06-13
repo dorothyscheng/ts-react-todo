@@ -6,11 +6,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 interface Props {
     todos: Todo[],
     updateTodo: (todo: Todo) => void,
+    handleDelete: (todo: Todo) => void,
 }
 
 function TodoList(props: Props): JSX.Element {
     const todoItems = props.todos.map((todo: Todo) => {
-        return <TodoItem key={todo._id} todo={todo} updateTodo={props.updateTodo} />
+        return <TodoItem key={todo._id} todo={todo} updateTodo={props.updateTodo} handleDelete={props.handleDelete} />
     });
     return (
         <ListGroup>

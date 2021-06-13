@@ -18,6 +18,11 @@ class TodoModel {
         const response: AxiosResponse = await axios.put<Todo>(`${endPoint}/${todo._id}`, todo);
         return response.data;
     }
+
+    static delete = async (todo: Todo): Promise<Todo> => {
+        const response: AxiosResponse = await axios.delete(`${endPoint}/${todo._id}`);
+        return response.data;
+    }
 }
 
 export default TodoModel;

@@ -19,3 +19,7 @@
     text-decoration: line-through;
     color: gray;
 }
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+}

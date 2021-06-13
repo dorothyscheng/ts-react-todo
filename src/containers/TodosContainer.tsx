@@ -55,7 +55,25 @@ class TodosContainer extends React.Component<{}, State> {
     updateTodo = (todo: Todo): void => {
         TodoModel.update(todo)
             .then((response: Todo) => {
-                this.fetchData();
+                let todos = this.state.todos;
+                todos = todos.filter(todo => todo._id !== response._id);
+                todos.push(response);
+                const sortedTodos = TodosContainer.sortTodos(todos);
+                this.setState({
+                    todos: sortedTodos,
+                });
+            });
+    }
+
+    handleDelete = (todo: Todo): void => {
+        TodoModel.delete(todo)
+            .then((response: Todo) => {
+                let todos = this.state.todos;
+                todos = todos.filter(todo => todo._id !== response._id);
+                const sortedTodos = TodosContainer.sortTodos(todos);
+                this.setState({
+                    todos: sortedTodos,
+                });
             });
     }
 
@@ -65,7 +83,7 @@ class TodosContainer extends React.Component<{}, State> {
             <div>
                 <h1>To Do's</h1>
                 <CreateTodoForm handleSubmit={this.handleSubmit} />
-                <TodoList todos={this.state.todos} updateTodo={this.updateTodo} />
+                <TodoList todos={this.state.todos} updateTodo={this.updateTodo} handleDelete={this.handleDelete} />
             </div>
         );
     }
